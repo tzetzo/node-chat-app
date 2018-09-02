@@ -14,21 +14,29 @@ app.use(express.static(publicPath));  //the static web site
 io.on('connection', (socket) => { //the only time we use io.on
     console.log('new user connected');
 
-    socket.on('disconnect', () => {
-        console.log('client disconnected');
+    //send only to the newly connected user a welcome message:
+    socket.emit('newMessage', {     //newMessage should correspond to the event name the client is listening for!
+        from: 'Admin',
+        text: 'Welcome to the chat app',
+        createdAt: new Date().getTime()
     });
-
-    // socket.emit('newMessage', {   //emits an event to a single connection!
-    //     from: 'lili',
-    //     text: 'hey what is going on tzetzo.',
-    //     createdAt: 1234567
-    // });
+    //let all users know a new user joined(except the user who joined):
+    socket.broadcast.emit('newMessage', {   //newMessage should correspond to the event name the client is listening for!
+        from: 'Admin',
+        text: 'New user joined',
+        createdAt: new Date().getTime()
+    });
 
     socket.on('createMessage', (message) => {
         console.log('createMessage', message);
 
         message.createdAt = new Date().getTime();
-        io.emit('newMessage', message ) //emits an event to all connected to the websocket server users
+        io.emit('newMessage', message ) //emits an event to all connected to the server users
+        //socket.broadcast.emit('newMessage', message) //emits an event to all connected users but the one who created the event
+    });
+
+    socket.on('disconnect', () => {
+        console.log('client disconnected');
     });
 });
 
