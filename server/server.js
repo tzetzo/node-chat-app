@@ -18,14 +18,17 @@ io.on('connection', (socket) => { //the only time we use io.on
         console.log('client disconnected');
     });
 
-    socket.emit('newMessage', {
-        from: 'lili',
-        text: 'hey what is going on tzetzo.',
-        createdAt: 1234567
-    });
+    // socket.emit('newMessage', {   //emits an event to a single connection!
+    //     from: 'lili',
+    //     text: 'hey what is going on tzetzo.',
+    //     createdAt: 1234567
+    // });
 
     socket.on('createMessage', (message) => {
         console.log('createMessage', message);
+
+        message.createdAt = new Date().getTime();
+        io.emit('newMessage', message ) //emits an event to all connected to the websocket server users
     });
 });
 
