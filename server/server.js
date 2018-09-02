@@ -3,7 +3,7 @@ const path = require('path'); //import path module
 const http = require('http'); //needed for socket.io
 const socketIO = require('socket.io');
 
-const {generateMessage} = require('./utils/message');
+const {generateMessage, generateLocationMessage} = require('./utils/message');
 
 const publicPath = path.join(__dirname, '../public');
 const port = process.env.PORT || 3000; //declare the port; process.env.PORT is provided by heroku
@@ -26,6 +26,10 @@ io.on('connection', (socket) => { //the only time we use io.on
         console.log('createMessage', message);
         io.emit('newMessage', generateMessage(message.from, message.text) ); //emits an event to all connected to the server users
         callback('this is from the server');  //sends back an acknowledgement to the user that his createMessage event was received
+    });
+
+    socket.on('createLocationMessage', (coords) => {
+        io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude)); //emits an event to all connected to the server users
     });
 
     socket.on('disconnect', () => {
