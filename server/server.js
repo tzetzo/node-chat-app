@@ -17,16 +17,15 @@ io.on('connection', (socket) => { //the only time we use io.on
     console.log('new user connected');
 
     //send only to the newly connected user a welcome message:
-    socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app'));    //newMessage should correspond to the event name the client is listening for!
+    socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app'));  //newMessage should correspond to the event name the client is listening for!
 
     //let all users know a new user joined(except the user who joined):
-    socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined'));   //newMessage should correspond to the event name the client is listening for!
+    socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined'));   //newMessage should correspond to the event name the client is listening for!  //emits an event to all connected users but the one who created the event
 
-    socket.on('createMessage', (message) => {
+    socket.on('createMessage', (message, callback) => {
         console.log('createMessage', message);
-
-        io.emit('newMessage', generateMessage(message.from, message.text)); //emits an event to all connected to the server users
-        //socket.broadcast.emit('newMessage', message) //emits an event to all connected users but the one who created the event
+        io.emit('newMessage', generateMessage(message.from, message.text) ); //emits an event to all connected to the server users
+        callback('this is from the server');  //sends back an acknowledgement to the user that his createMessage event was received
     });
 
     socket.on('disconnect', () => {
@@ -35,5 +34,5 @@ io.on('connection', (socket) => { //the only time we use io.on
 });
 
 server.listen(port, () => {
-  console.log(`Server is up on port ${port}`);
+    console.log(`Server is up on port ${port}`);
 });
