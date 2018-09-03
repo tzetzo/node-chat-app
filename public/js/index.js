@@ -31,29 +31,37 @@ socket.on('newLocationMessage', function (message) {
 $('#message-form').on('submit', function(e){
     e.preventDefault(); //prevent the default behaviour of the form which is to get send
 
+    const messageTextBox = $('[name=message]');
+
     socket.emit('createMessage', {
       from: 'User',
-      text: $('[name=message]').val()
+      text: messageTextBox.val()
     }, function(acknow) {     //acknowledgement from the server that the createMessage event was received
-        console.log('Got it!', acknow);
+        messageTextBox.val(''); //clear the input after receiving the acknowledgement from the server
     });
 
 });
 
 const locationButton = $('#send-location');
 locationButton.on('click', function(e) {
+
     if (!navigator.geolocation) {
         return alert('Geolocation not supported by your browser.');
     }
 
+    locationButton.prop('disabled',true).text('Sending location...');
+
     navigator.geolocation.getCurrentPosition(function (position) {
+
         socket.emit('createLocationMessage', {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude
         }, function(acknow) {     //acknowledgement from the server that the createMessage event was received
-            console.log('Got it!', acknow);
+          locationButton.prop('disabled',false).text('Send location');
         });
+
     }, function () {
-        alert('Unable to fetch location.')
+        alert('Unable to fetch location.');
+        locationButton.prop('disabled',false).text('Send location');
     });
 });
