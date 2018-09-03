@@ -10,24 +10,46 @@ socket.on('disconnect', function () {
 
 socket.on('newMessage', function (message) {
     const formattedTime = moment(message.createdOn).format('h:mm a');
-    //console.log('newMessage: ', message);
-    //$('#messages').append(`<li>${message.from} : ${message.text}</li>`);  //introduces the ability of attacker injecting malicious code!
-    const li = $('<li></li>');
-    li.text(`${message.from} ${formattedTime}: ${message.text}`);
-    $('#messages').append(li);
+
+    const template = $('#message-template').html(); //get the template & its markup from index.html
+    const html = Mustache.render(template, {  //render the template with the data used by the template
+        text: message.text,
+        from: message.from,
+        createdOn: formattedTime
+    });
+
+    $('#messages').append(html);  //put the Mustache rendered template in the selected DOM element
+
+    // const formattedTime = moment(message.createdOn).format('h:mm a');
+    // //console.log('newMessage: ', message);
+    // //$('#messages').append(`<li>${message.from} : ${message.text}</li>`);  //introduces the ability of attacker injecting malicious code!
+    // const li = $('<li></li>');
+    // li.text(`${message.from} ${formattedTime}: ${message.text}`);
+    // $('#messages').append(li);
 });
 
 socket.on('newLocationMessage', function (message) {
-    const formattedTime = moment(message.createdOn).format('h:mm a');
-    //console.log('newLocationMessage: ', message);
-    //$('#messages').append(`<li>${message.from} : <a href="${message.url}" target="_blank">My current location</a></li>`); //introduces the ability of attacker injecting malicious code!
-    const li = $('<li></li>');
-    const a = $('<a target="_blank">My current location</a>');
+  const formattedTime = moment(message.createdOn).format('h:mm a');
 
-    li.text(`${message.from} ${formattedTime}: `);
-    a.attr('href', message.url);
-    li.append(a);
-    $('#messages').append(li);
+  const template = $('#location-message-template').html(); //get the template & its markup from index.html
+  const html = Mustache.render(template, {  //render the template with the data used by the template
+      url: message.url,
+      from: message.from,
+      createdOn: formattedTime
+  });
+
+  $('#messages').append(html);  //put the Mustache rendered template in the selected DOM element
+
+    // const formattedTime = moment(message.createdOn).format('h:mm a');
+    // //console.log('newLocationMessage: ', message);
+    // //$('#messages').append(`<li>${message.from} : <a href="${message.url}" target="_blank">My current location</a></li>`); //introduces the ability of attacker injecting malicious code!
+    // const li = $('<li></li>');
+    // const a = $('<a target="_blank">My current location</a>');
+    //
+    // li.text(`${message.from} ${formattedTime}: `);
+    // a.attr('href', message.url);
+    // li.append(a);
+    // $('#messages').append(li);
 });
 
 $('#message-form').on('submit', function(e){

@@ -24,9 +24,38 @@
       </div>
     </div>
 
+<!--template used by Mustache in index.js-->
+    <script id='message-template' type='text/template'>
+        <li class="message">
+          <div class="message__title">
+              <h4>{{from}}</h4>
+              <span>{{createdOn}}</span>
+          </div>
+          <div class="message__body">
+              <p>{{text}}</p>
+          </div>
+        </li>
+    </script>
+<!--template used by Mustache in index.js-->
+    <script id='location-message-template' type='text/template'>
+        <li class="message">
+          <div class="message__title">
+              <h4>{{from}}</h4>
+              <span>{{createdOn}}</span>
+          </div>
+          <div class="message__body">
+            <p>
+              <a target="_blank" href="{{url}}">My current location</a>
+            </p>
+          </div>
+        </li>
+    </script>
+
+
     <script src='/socket.io/socket.io.js'></script>
     <script src='./js/libs/jquery-3.3.1.min.js'></script>
     <script src='./js/libs/moment.js'></script>
+    <script src='./js/libs/mustache.js'></script>
     <script src='./js/index.js'></script>
   </body>
 </html>
