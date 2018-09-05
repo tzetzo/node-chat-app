@@ -12,17 +12,33 @@ function scrollToBottom() {
     const lastMessageHeight = newMessage.prev().innerHeight();
 
     if (clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight) {
-    
+
       messages.scrollTop(scrollHeight);
     }
 }
 
 socket.on('connect', function () {
-    console.log('connected to server');
+    const params = $.deparam();   //returns object containing the URL query params
+    socket.emit('join', params, function(err) {
+        if(err) {
+            alert(err);
+            window.location.href = '/';
+        } else {
+            console.log('No error');
+        }
+    });
 });
 
 socket.on('disconnect', function () {
     console.log('disconnected from server');
+});
+
+socket.on('updateUserList', function (users) {
+    const ol = $('<ol></ol>');
+    users.forEach(function(user){
+        ol.append($('<li></li>').text(user));
+    });
+    $('#users').html(ol);
 });
 
 socket.on('newMessage', function (message) {
