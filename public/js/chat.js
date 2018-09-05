@@ -93,7 +93,6 @@ $('#message-form').on('submit', function(e){
     const messageTextBox = $('[name=message]');
 
     socket.emit('createMessage', {
-      from: 'User',
       text: messageTextBox.val()
     }, function(acknow) {     //acknowledgement from the server that the createMessage event was received
         messageTextBox.val(''); //clear the input after receiving the acknowledgement from the server

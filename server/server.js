@@ -40,12 +40,19 @@ io.on('connection', (socket) => { //the only time we use io.on
 
     socket.on('createMessage', (message, callback) => {
         // console.log('createMessage', message);
-        io.emit('newMessage', generateMessage(message.from, message.text) ); //emits an event to all connected to the server users
+        const user = users.getUser(socket.id);
+
+        if(user && isRealString(message.text)){
+          io.to(user.room).emit('newMessage', generateMessage(user.name, message.text) ); //emits an event to all connected to the server users
+        }
         callback();  //sends back an acknowledgement to the user that his createMessage event was received
     });
 
     socket.on('createLocationMessage', (coords, callback) => {
-        io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude)); //emits an event to all connected to the server users
+        const user = users.getUser(socket.id);
+        if(user){
+          io.to(user.room).emit('newLocationMessage', generateLocationMessage(user.name, coords.latitude, coords.longitude)); //emits an event to all connected to the server users
+        }
         callback(); //sends back an acknowledgement to the user that his createLocationMessage event was received
     });
 
