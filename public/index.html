@@ -27,5 +27,15 @@
       </form>
     </div>
 
+
+
+    <!--new feature to get the currently available rooms for the new user to choose from-->
+    <script src='./js/libs/jquery-3.3.1.min.js'></script>
+    <script>
+        $.get('/rooms', function( data ) {
+            console.log('user list: ', data);
+        });
+    </script>
+
   </body>
 </html>

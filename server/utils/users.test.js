@@ -5,6 +5,7 @@ const {Users} = require('./users');
 describe('Users', () => {
     let users;
 
+    //called before every if() test case:
     beforeEach(() => {
         users = new Users();
         users.users = [{

@@ -25,7 +25,8 @@
       </div>
     </div>
 
-<!--template used by Mustache in chat.js-->
+<!--defining our templates at the end of the HTML-->
+<!--reusable template used by Mustache in chat.js to append to #messages-->
     <script id='message-template' type='text/template'>
         <li class="message">
           <div class="message__title">
@@ -37,7 +38,7 @@
           </div>
         </li>
     </script>
-<!--template used by Mustache in chat.js-->
+<!--reusable template used by Mustache in chat.js to append to #messages-->
     <script id='location-message-template' type='text/template'>
         <li class="message">
           <div class="message__title">
@@ -52,8 +53,7 @@
         </li>
     </script>
 
-
-    <script src='/socket.io/socket.io.js'></script>
+    <script src='/socket.io/socket.io.js'></script><!--107 lesson-->
     <script src='./js/libs/jquery-3.3.1.min.js'></script>
     <script src='./js/libs/moment.js'></script>
     <script src='./js/libs/mustache.js'></script>
